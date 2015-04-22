@@ -1,0 +1,11 @@
+GEM
+  specs:
+    term-ansicolor (1.3.0)
+      tins (~> 1.0)
+    tins (1.3.5)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  term-ansicolor (~> 1.3.0)
