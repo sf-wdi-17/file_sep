@@ -1,4 +1,6 @@
-# File Separation in Ruby (`load`, `require`, and `require_relative`)
+#Fi
+
+### File Separation in Ruby (`load`, `require`, and `require_relative`) (10 mins)
 
 Load & require are very similar to the purpose of `require` in Node.js
 
@@ -19,143 +21,32 @@ Before you start using these commands in ruby, it's important to understand what
   - Same as `require`, but will look for the specified `.rb` file *relative* to the file that is making the request.
     + That is, when you use `require_relative`, ruby will start looking for the file in the same directory as the file where you include the `require_relative` statement
 
-### Active Learning: `require_relative` (15 mins)
+### Active Learning: `load` & `require` (10 mins)
 
-1. Take 5 minutes and look at the files `car.rb` and `convertible.rb` in the `files/models/` directory. When you feel like you have a solid idea of whats going on, explain it to your buddy.
-2. Take 10 minutes to create a new file `fast_car.rb` in the `files/models/` directory. In this file, build a new class `FastCar` that inherits from the `Car` class. Once you have finished writing the file, play around and verify that everything is working properly.
+Create a class and then include it using both `load` and `require_relative`. Observe the differences in behavior.
 
+  1. Create Person class that has name and age attributes. It will also have a `vote` method. But before the person can `vote`, the method should check to make sure that person is over age 18.
+  2. Open pry and `load` this person class.
+  3. In `pry`, create a person who is 19 years old.
+  4. Try to vote. If everything is set up correctly, this shouldn't be a problem.
+  5. Now change the `vote` method in the person class so that the voting age is 21.
+  6. `load` the person class. Was this change seen?
 
-## Modules
-There are only so many possible ways that we could name a class. What are we to do if a class name has already been taken? Like in this example...
-
-```ruby
-class Car
-  attr_accessor :make, :model
-
-  def initialize(make,model)
-    @make = make
-    @model = model
-  end
-
-  def go_to_speed(speed)
-    @speed = speed
-  end
-end
-
-class Car
-  attr_accessor :color
-
-  def initialize(color)
-    @color = color
-  end
-end
-```
-
-While this example may seem completely inplausible, it's actually quite possible it could come up in an unexpected way. A more realistic way that this could come up is when using `require` or its relative counter part. Suppose I had the following:
-
-`some_kind_of_file.rb`
-```ruby
-class Car
-  attr_accessor :make, :model
-
-  def initialize(make,model)
-    @make = make
-    @model = model
-  end
-
-  def go_to_speed(speed)
-    @speed = speed
-  end
-end
-```
-And
-`car.rb`
-```ruby
-require_relative 'some_kind_of_file.rb'
-
-class Car
-  attr_accessor :color
-
-  def initialize(color)
-    @color = color
-  end
-end
-```
-
-The 'namespace' gets polluted with multiple different implementations of the `Car` class. In ruby, we use modules to solve this namespacing issue.
-
-`some_kind_of_file.rb`
-```ruby
-module Toy
-  class Car
-    attr_accessor :make, :model
-
-    def initialize(make,model)
-      @make = make
-      @model = model
-    end
-
-    def go_to_speed(speed)
-      @speed = speed
-    end
-  end
-end
-```
-And
-`car.rb`
-```ruby
-require_relative 'some_kind_of_file.rb'
-
-class Car
-  attr_accessor :color
-
-  def initialize(color)
-    @color = color
-  end
-end
-
-car = Car.new("Red")
-toy = Toy::Car.new("BMW", "7-Series")
-```
-
-## Gemfile's and the `bundle` command
-Much like the `package.json` file that we had in node, there is a file called a `Gemfile` in ruby, where we specify all of the ruby packages (aka gems) that are project uses. The `Gemfile` should go in the root directory of your project. For example we could add a output coloring gem for ruby by doing the following.
-
-`Gemfile`
-```ruby
-gem 'term-ansicolor', '~> 1.3.0'
-```
-
-then to install all of the gems, you simple run the command `bundle`.
-
-```bash
-$ bundle
-```
-
-**Note:** if you're having errors try running `gem install term-ansicolor` first.
-
-### Once installed...
-We can use the `term-ansicolor` gem in any file in our project by using `require` at the top of a file. Like so
-
-`colors.rb`
-```ruby
-require 'term/ansicolor'
-
-color = Term::ANSIColor
-
-puts color.red, "Hey"
-puts color.blue, "Whats"
-puts color.green, "Up"
-```
-
-## Final exercise 10-15 minutes
-
-In a file `main.rb` in the `files/` directory, use `require` and `require_relative` appropriately to combine the files `car.rb`, `convertible.rb`, `fast_car.rb`, and `toy.rb` into a single file. Create an instance of the `Car`, `Convertible`, `FastCar`, `Toy::Car`, and `Toy::Convertible` classes. Additionally use the `term-ansicolor` gem to color some output appropriately.
-
+Exit `pry` (type `exit`) and then open a new pry REPL (type `pry` at a bash prompt). Now, repeat the steps above starting at Step 2, but this time use `require_relative` rather than `load`. When you change the voting age and re-require the class, are the changes reflected?
 
 ### Discussion: `load` & `require` (5 mins)
 
-In small groups, research and discuss the differences between `require` and `require_relative`. Try to answer the following:
+In small groups, research and discuss the differences between `load` and `require/require_relative`. Try to answer the following:
 
+  - How are `load` and `require` different in practice?
+  - In what situations should you use `load`?
   - In what situations should you use `require`?
   - In what situations should you use `require_relative`?
+
+I would like one group to volunteer to explain what they discussed to the rest of the class.
+
+### Exercises:
+
+It's unlikely we'll have time to do [these exercises](ruby_inheritance_exercises.md) in class, but if you can, doing [these exercises](ruby_inheritance_exercises.md) will provide you with some repetition and help you in the long run.
+
+

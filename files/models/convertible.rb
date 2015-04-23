@@ -16,6 +16,7 @@ class Convertible < Car
   def go_to_speed(speed)
     puts "Top coming down"
     convert
+    seats("I'm have cushion")
     super(speed)
   end
 end
